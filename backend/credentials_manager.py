@@ -2,7 +2,8 @@ import pandas as pd
 import requests
 from pprint import pprint
 from datetime import datetime as dt
-from credentials import *
+#from credentials import *
+import os
 from dotenv import load_dotenv
 load_dotenv()
 
