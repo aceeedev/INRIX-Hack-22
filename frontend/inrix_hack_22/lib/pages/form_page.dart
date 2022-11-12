@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:inrix_hack_22/backend/database_manager.dart';
+import 'package:inrix_hack_22/models/proximity_reminder.dart';
 
 class FormPage extends StatefulWidget {
   const FormPage({super.key});
@@ -8,10 +10,13 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
-  TextEditingController longTextController = TextEditingController();
-  TextEditingController latTextController = TextEditingController();
-  TextEditingController phoneTextController = TextEditingController();
-  TextEditingController etaTextController = TextEditingController();
+  final longTextController = TextEditingController();
+  final latTextController = TextEditingController();
+  final etaTextController = TextEditingController();
+  final phoneNumTextController = TextEditingController();
+  final phoneNameTextController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -19,6 +24,8 @@ class _FormPageState extends State<FormPage> {
     longTextController.dispose();
     latTextController.dispose();
     etaTextController.dispose();
+    phoneNumTextController.dispose();
+    phoneNameTextController.dispose();
 
     super.dispose();
   }
@@ -30,21 +37,54 @@ class _FormPageState extends State<FormPage> {
         title: const Text("Form Page"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: createTextForms([
-            {'controller': longTextController, 'text': 'Longitude'},
-            {'controller': latTextController, 'text': 'Latitude'},
-            {'controller': phoneTextController, 'text': 'Phone Number'}
-          ]),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: createTextForms([
+              {
+                'controller': longTextController,
+                'text': 'Longitude',
+                'validator': doubleValidator
+              },
+              {
+                'controller': latTextController,
+                'text': 'Latitude',
+                'validator': doubleValidator
+              },
+              {
+                'controller': etaTextController,
+                'text': 'Proximity',
+                'validator': doubleValidator
+              },
+              {
+                'controller': phoneNumTextController,
+                'text': 'Phone Number',
+                'validator': defaultValidator
+              },
+              {
+                'controller': phoneNameTextController,
+                'text': 'Phone Number Name',
+                'validator': defaultValidator
+              }
+            ]),
+          ),
         ),
       ),
     );
   }
 
-  void sendForm() {
-    // example of getting text from long: longTextController.text
+  void sendForm() async {
+    ProximityReminder proximityReminder = ProximityReminder(
+      longitude: double.parse(longTextController.text),
+      latitude: double.parse(latTextController.text),
+      proximity: double.parse(etaTextController.text),
+      phoneNumber: phoneNumTextController.text,
+      phoneNumberName: phoneNameTextController.text,
+    );
+
+    await AppDatabase.instance.createProximityReminder(proximityReminder);
   }
 
   List<Widget> createTextForms(List<Map<String, dynamic>> inputFields) {
@@ -60,8 +100,9 @@ class _FormPageState extends State<FormPage> {
       ));
       listOfTextFields.add(Padding(
         padding: const EdgeInsets.only(bottom: 25.0),
-        child: TextField(
+        child: TextFormField(
           controller: inputField['controller'],
+          validator: inputField['validator'],
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             hintText: 'Please Input the ${inputField['text']}',
@@ -70,9 +111,28 @@ class _FormPageState extends State<FormPage> {
       ));
     }
 
-    listOfTextFields
-        .add(ElevatedButton(onPressed: sendForm, child: const Icon(Icons.add)));
+    listOfTextFields.add(ElevatedButton(
+        onPressed: () {
+          if (formKey.currentState!.validate()) sendForm();
+
+          Navigator.pop(context);
+        },
+        child: const Icon(Icons.add)));
 
     return listOfTextFields;
+  }
+
+  String? doubleValidator(value) {
+    if (value == null || value.isEmpty || double.tryParse(value) != null) {
+      return 'Please enter a number';
+    }
+    return null;
+  }
+
+  String? defaultValidator(value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a value';
+    }
+    return null;
   }
 }
