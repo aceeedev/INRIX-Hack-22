@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:inrix_hack_22/backend/database_manager.dart';
+import 'package:inrix_hack_22/models/proximity_reminder.dart';
 
 class FormPage extends StatefulWidget {
   const FormPage({super.key});
@@ -10,8 +12,9 @@ class FormPage extends StatefulWidget {
 class _FormPageState extends State<FormPage> {
   TextEditingController longTextController = TextEditingController();
   TextEditingController latTextController = TextEditingController();
-  TextEditingController phoneTextController = TextEditingController();
   TextEditingController etaTextController = TextEditingController();
+  TextEditingController phoneNumTextController = TextEditingController();
+  TextEditingController phoneNameTextController = TextEditingController();
 
   @override
   void dispose() {
@@ -19,6 +22,8 @@ class _FormPageState extends State<FormPage> {
     longTextController.dispose();
     latTextController.dispose();
     etaTextController.dispose();
+    phoneNumTextController.dispose();
+    phoneNameTextController.dispose();
 
     super.dispose();
   }
@@ -36,15 +41,28 @@ class _FormPageState extends State<FormPage> {
           children: createTextForms([
             {'controller': longTextController, 'text': 'Longitude'},
             {'controller': latTextController, 'text': 'Latitude'},
-            {'controller': phoneTextController, 'text': 'Phone Number'}
+            {'controller': etaTextController, 'text': 'Proximity'},
+            {'controller': phoneNumTextController, 'text': 'Phone Number'},
+            {'controller': phoneNameTextController, 'text': 'Phone Number Name'}
           ]),
         ),
       ),
     );
   }
 
-  void sendForm() {
+  void sendForm() async {
     // example of getting text from long: longTextController.text
+    ProximityReminder proximityReminder = ProximityReminder(
+      longitude: double.parse(longTextController.text),
+      latitude: double.parse(latTextController.text),
+      proximity: double.parse(etaTextController.text),
+      phoneNumber: phoneNumTextController.text,
+      phoneNumberName: phoneNameTextController.text,
+    );
+
+    await AppDatabase.instance.createProximityReminder(proximityReminder);
+
+    print((await AppDatabase.instance.readAllProximityReminders()).length);
   }
 
   List<Widget> createTextForms(List<Map<String, dynamic>> inputFields) {
