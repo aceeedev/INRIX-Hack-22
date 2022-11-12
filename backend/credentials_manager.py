@@ -3,14 +3,15 @@ import requests
 from pprint import pprint
 from datetime import datetime as dt
 from credentials import *
-
+from dotenv import load_dotenv
+load_dotenv()
 
 class CredentialsManager:
     def __init__(self):
         self.ENDPOINT = "https://api.iq.inrix.com"
         parameters = {
-            "appId": APP_ID,
-            "hashToken": HASH_TOKEN
+            "appId": os.environ.get("APP_ID"),
+            "hashToken": os.environ.get("HASH_TOKEN")
         }
         response = requests.get(url=self.ENDPOINT+"/auth/v1/appToken", params=parameters)
         response.raise_for_status()
@@ -20,7 +21,7 @@ class CredentialsManager:
         # self.expiration_time = self.expiration_time.replace(tzinfo=None)
         print(self.expiration_time, type(self.expiration_time))
         self.hash_token = data["result"]["token"]
-        self.app_id = APP_ID
+        self.app_id = os.environ.get("APP_ID")
 
     # Gets a new token if the last one has expired
     def set_token(self):

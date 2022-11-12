@@ -1,0 +1,27 @@
+import requests
+
+url = "https://api.iq.inrix.com/drivetimePolygons?center=37.7705%7C-122.446527&rangeType=A&duration=30 "
+
+payload={}
+headers = {
+  'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBJZCI6Im8zbTk3bHB5bzMiLCJ0b2tlbiI6eyJpdiI6IjhjNjM0NGFmZjc4NDIyODdhZGZkYjcxOWUzMzdkYWE2IiwiY29udGVudCI6IjVhZjUwZDU0YjgwOTljMmJkZTViMDNlZmY5ZTM0MzdlOGFjMmMxNzJkMjFkMjFjMjA0NzQxYjgxNDJhYmM1OTg0ZDYwNmU1N2M1OGQyMTkzYzg0OGUyYjNmYjZiZjY2NzVjN2M0ZmFkNDc0NTE3NjQ2ZGJlYzA0MmUxYmI3YjM1OTk3OTI2ZWE5Yzg3OGI3ZDE5N2ExY2VlZjRkZGI3ZmY1ZTMwM2RiYmM5NWYxZjJlNzA0NTE2ZmFiMzg2MTZjOTZiNmY1ZjFjMzUzOWNhZTUwYWQ3ZTIyODVkZWFkMWI5ZjNiNDFjYjRjZDRmYmE2NTEwZjBkMDMyMmU3YTJlNDJlODk2ZjdjM2E5YThiNTMyNzc0MTY1NjFjNzdiYmMyNzQ5OWQxNmM4NzdmMzQyN2VmYTA1YmY4NmUyNGEwMjRiNjk4NWVmYWQ3Nzk2NjY4ZmU1NzJiMzY0NTU5MTg4OGZhZTgxODhjZDU3NmE3MTRkMzQxYWQyNDAyYjRhY2QyYjMyNTBjYzZkNjIxZDAyMmQ1NTc4ZmEyNjA1Nzk3ZjZkMWFjMTZlZmJkOGI3MDgyYzI2NGRjNjgzYTc3ZTFhNTQ3ZTVjNDU3ZWZkMTMyZmM3ZjgwMmQzZmEyZDcwYjRiN2NjZDM5OWIxYjdkODc0MjhiMWMzNzlkYTk5NDE3MjIwMjRmMzk2NjU2MzNkOGQ5YWVjOGJmNGIzNTY1MzIyNzA1YTFlMjZiZjcwODRhNjY0YWY4ZTdmNmZiY2MxNTVmZmYxN2FjZTk5MGU3YTJjMDgwYTcyZDI5YzgzMjc1NzI5YmM3MjVkZmU3ZGRhZTVkM2JiODc5ZTFkNmVkZmJhODNiNzBiMjhlOTU2YWM2M2RlYjViZDk4In0sInNlY3VyaXR5VG9rZW4iOnsiaXYiOiI4YzYzNDRhZmY3ODQyMjg3YWRmZGI3MTllMzM3ZGFhNiIsImNvbnRlbnQiOiI2ZmZkNzc2NTk2MzZiNDNiZTQ3YTIzZTRlMWYwNTAyNWI1OWJlYTY1YWMxYjRhYjMxZjYzM2NmNjVhZWFlMzk1NzE3YTZmMGNhOGEzNmJiY2QxNjZmYjhkIn0sImp0aSI6IjVkYzMyZWM5LTViMDUtNDA0Ny04OTI4LTU0MWZlMDJiZjcxMSIsImlhdCI6MTY2ODI5MzE1MywiZXhwIjoxNjY4Mjk2NzUzfQ.mKpMCMJ8dO-wV6FhQkwDpk95WX1DfAt_WD2bC7nHhjw'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+###
+
+coords_string = response.text[314:(len(response.text) - 75)]
+print(len(coords_string))
+
+# print(coords_string[2054:])
+
+#[314:]
+
+coords1D = coords_string.split(' ')
+
+coords = []
+for i in range(0, len(coords1D), 2):
+    coords.append((float(coords1D[i]), float(coords1D[i+1])))
+
+print(coords)
