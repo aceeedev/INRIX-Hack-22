@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inrix_hack_22/pages/form_page.dart';
+import 'package:inrix_hack_22/pages/location_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,15 +17,16 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Home Page"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'This is the home page',
-            ),
-          ],
+          child: TextButton(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
         ),
-      ),
+        onPressed: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const LocationPage()));
+        },
+        child: const Text('This is the device\'s location'),
+      )),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => const FormPage())),
