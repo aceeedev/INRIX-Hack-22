@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inrix_hack_22/pages/home_page.dart';
+import 'package:inrix_hack_22/pages/location_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
