@@ -10,11 +10,13 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
-  TextEditingController longTextController = TextEditingController();
-  TextEditingController latTextController = TextEditingController();
-  TextEditingController etaTextController = TextEditingController();
-  TextEditingController phoneNumTextController = TextEditingController();
-  TextEditingController phoneNameTextController = TextEditingController();
+  final longTextController = TextEditingController();
+  final latTextController = TextEditingController();
+  final etaTextController = TextEditingController();
+  final phoneNumTextController = TextEditingController();
+  final phoneNameTextController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -35,23 +37,45 @@ class _FormPageState extends State<FormPage> {
         title: const Text("Form Page"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: createTextForms([
-            {'controller': longTextController, 'text': 'Longitude'},
-            {'controller': latTextController, 'text': 'Latitude'},
-            {'controller': etaTextController, 'text': 'Proximity'},
-            {'controller': phoneNumTextController, 'text': 'Phone Number'},
-            {'controller': phoneNameTextController, 'text': 'Phone Number Name'}
-          ]),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: createTextForms([
+              {
+                'controller': longTextController,
+                'text': 'Longitude',
+                'validator': doubleValidator
+              },
+              {
+                'controller': latTextController,
+                'text': 'Latitude',
+                'validator': doubleValidator
+              },
+              {
+                'controller': etaTextController,
+                'text': 'Proximity',
+                'validator': doubleValidator
+              },
+              {
+                'controller': phoneNumTextController,
+                'text': 'Phone Number',
+                'validator': defaultValidator
+              },
+              {
+                'controller': phoneNameTextController,
+                'text': 'Phone Number Name',
+                'validator': defaultValidator
+              }
+            ]),
+          ),
         ),
       ),
     );
   }
 
   void sendForm() async {
-    // example of getting text from long: longTextController.text
     ProximityReminder proximityReminder = ProximityReminder(
       longitude: double.parse(longTextController.text),
       latitude: double.parse(latTextController.text),
@@ -61,8 +85,6 @@ class _FormPageState extends State<FormPage> {
     );
 
     await AppDatabase.instance.createProximityReminder(proximityReminder);
-
-    print((await AppDatabase.instance.readAllProximityReminders()).length);
   }
 
   List<Widget> createTextForms(List<Map<String, dynamic>> inputFields) {
@@ -78,8 +100,9 @@ class _FormPageState extends State<FormPage> {
       ));
       listOfTextFields.add(Padding(
         padding: const EdgeInsets.only(bottom: 25.0),
-        child: TextField(
+        child: TextFormField(
           controller: inputField['controller'],
+          validator: inputField['validator'],
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             hintText: 'Please Input the ${inputField['text']}',
@@ -88,9 +111,28 @@ class _FormPageState extends State<FormPage> {
       ));
     }
 
-    listOfTextFields
-        .add(ElevatedButton(onPressed: sendForm, child: const Icon(Icons.add)));
+    listOfTextFields.add(ElevatedButton(
+        onPressed: () {
+          if (formKey.currentState!.validate()) sendForm();
+
+          Navigator.pop(context);
+        },
+        child: const Icon(Icons.add)));
 
     return listOfTextFields;
+  }
+
+  String? doubleValidator(value) {
+    if (value == null || value.isEmpty || double.tryParse(value) != null) {
+      return 'Please enter a number';
+    }
+    return null;
+  }
+
+  String? defaultValidator(value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a value';
+    }
+    return null;
   }
 }
