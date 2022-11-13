@@ -35,7 +35,8 @@ class _LocationPageState extends State<LocationPage> {
   late GoogleMapController mapController;
   late LatLng _center;
   Set<Polygon> _polygon = HashSet<Polygon>();
-  late List<LatLng> points;
+  List<LatLng> points = [];
+  late Position position;
 
   @override
   void initState() {
@@ -43,9 +44,7 @@ class _LocationPageState extends State<LocationPage> {
     _center = LatLng(
         widget.proximityReminder.latitude, widget.proximityReminder.longitude);
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    points = getPoints();
-    // });
+    setAsyncVals();
 
     // initialize the polygon
     _polygon.add(Polygon(
@@ -63,13 +62,8 @@ class _LocationPageState extends State<LocationPage> {
     ));
   }
 
-  getPoints() async {
-    late Position pos;
-    try {
-      pos = await determinePosition();
-    } catch (e) {
-      print(e);
-    }
+  Future setAsyncVals() async {
+    Position pos = await determinePosition();
     var coords = (await checkIfInsideArea(
         pos.longitude,
         pos.latitude,
@@ -79,14 +73,19 @@ class _LocationPageState extends State<LocationPage> {
 
     print(coords);
 
-    List<LatLng> points = [];
+    List<LatLng> pts = [];
     for (int i = 0; i < coords.length; i++) {
       print(coords[i][0] + coords[i][1]);
       points
           .add(LatLng(double.parse(coords[i][0]), double.parse(coords[i][0])));
     }
 
-    return points;
+    if (mounted) {
+      setState(() {
+        points = pts;
+        position = pos;
+      });
+    }
   }
 
   void _onMapCreated(GoogleMapController controller) {
