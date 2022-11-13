@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:inrix_hack_22/backend/geolocation.dart';
 
 class LocationPage extends StatefulWidget {
   const LocationPage({Key? key}) : super(key: key);
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return const MaterialApp(
-  //     title: 'Flutter Location Demo',
-  //     debugShowCheckedModeBanner: false,
-  //     home: HomePage(),
-  //   );
-  // }
 
   @override
   State<LocationPage> createState() => _LocationPageState();
 }
 
 class _LocationPageState extends State<LocationPage> {
+  late Position _currentPosition = Position(
+      longitude: 1,
+      latitude: 1,
+      timestamp: DateTime.now(),
+      accuracy: 1,
+      altitude: 1,
+      heading: 1,
+      speed: 1,
+      speedAccuracy: 1);
+
+  @override
+  void initState() {
+    super.initState();
+
+    //_getCurrentPosition();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +39,7 @@ class _LocationPageState extends State<LocationPage> {
             children: [
               Text('LAT: ${_currentPosition?.latitude ?? ""}'),
               Text('LNG: ${_currentPosition?.longitude ?? ""}'),
-              Text('ADDRESS: ${_currentAddress ?? ""}'),
+              //Text('ADDRESS: ${_currentAddress ?? ""}'),
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: _getCurrentPosition,
@@ -44,51 +53,15 @@ class _LocationPageState extends State<LocationPage> {
     );
   }
 
-  String? _currentAddress;
-  Position? _currentPosition;
+  void _getCurrentPosition() async {
+    Position currentPosition = await determinePosition();
 
-  Future<bool> _handleLocationPermission() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    // if (!serviceEnabled) {
-    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //       content: Text(
-    //           'Location services are disabled. Please enable the services')));
-    //   return false;
-    // }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Location permissions are denied')));
-        return false;
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
-      return false;
-    }
-    return true;
-  }
-
-  Future<void> _getCurrentPosition() async {
-    final hasPermission = await _handleLocationPermission();
-
-    if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
-      setState(() => _currentPosition = position);
-      _getAddressFromLatLng(_currentPosition!);
-    }).catchError((e) {
-      debugPrint(e);
+    setState(() {
+      _currentPosition = currentPosition;
     });
   }
 
+/*
   Future<void> _getAddressFromLatLng(Position position) async {
     await placemarkFromCoordinates(
             _currentPosition!.latitude, _currentPosition!.longitude)
@@ -101,5 +74,5 @@ class _LocationPageState extends State<LocationPage> {
     }).catchError((e) {
       debugPrint(e);
     });
-  }
+  }*/
 }
