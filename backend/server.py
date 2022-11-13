@@ -75,7 +75,7 @@ def check_distance():
     dpoly = DrivePolygon(time_thresh, target_coord)
     valid = dpoly.check(my_coord)
 
-    return jsonify({"inside": valid}), 200
+    return jsonify({"inside": valid, "coords": dpoly.coords}), 200
 
 @app.route("/getcoordinates")
 def get_coords():
