@@ -9,6 +9,7 @@ import 'package:inrix_hack_22/app.dart';
 import 'package:inrix_hack_22/models/proximity_reminder.dart';
 import 'package:inrix_hack_22/backend/database_manager.dart';
 import 'package:inrix_hack_22/backend/geolocation.dart';
+import 'package:workmanager/workmanager.dart';
 
 class LocationPage extends StatefulWidget {
   const LocationPage({Key? key, required this.proximityReminder})
@@ -25,37 +26,38 @@ class _LocationPageState extends State<LocationPage> {
     super.initState();
   }
 
-  determinePositionWrap() async {
-    return await determinePosition();
-  }
+  // late Position position;
+  // determinePositionWrap() async {
+  //   position = await determinePosition();
+  // }
 
-  checkIfInsideAreaWrap(myLon, myLat, timeTresh, lon, lat) async {
-    return await checkIfInsideArea(myLon, myLat, timeTresh, lon, lat);
-  }
+  // checkIfInsideAreaWrap(myLon, myLat, timeTresh, lon, lat) async {
+  //   return await checkIfInsideArea(myLon, myLat, timeTresh, lon, lat);
+  // }
 
   @override
   Widget build(BuildContext context) {
     // for google maps initialization
     late GoogleMapController mapController;
     final LatLng _center = LatLng(
-        widget.proximityReminder.latitude, widget.proximityReminder.latitude);
+        widget.proximityReminder.latitude, widget.proximityReminder.longitude);
     void _onMapCreated(GoogleMapController controller) {
       mapController = controller;
     }
 
-    Position position = determinePositionWrap();
+    // position = determinePositionWrap();
 
-    List coords = checkIfInsideAreaWrap(
-        position.longitude,
-        position.latitude,
-        widget.proximityReminder.proximity,
-        widget.proximityReminder.longitude,
-        widget.proximityReminder.latitude)['coords'];
+    // List coords = checkIfInsideAreaWrap(
+    //     position.longitude,
+    //     position.latitude,
+    //     widget.proximityReminder.proximity,
+    //     widget.proximityReminder.longitude,
+    //     widget.proximityReminder.latitude)['coords'];
 
-    List<LatLng> points = [];
-    for (int i = 0; i < coords.length; i++) {
-      points.add(LatLng(coords[1], coords[1]));
-    }
+    // List<LatLng> points = [];
+    // for (int i = 0; i < coords.length; i++) {
+    //   points.add(LatLng(coords[1], coords[1]));
+    // }
 
     // this is a list of polygons around santa clara for demo
     // List<LatLng> points = [
@@ -71,7 +73,7 @@ class _LocationPageState extends State<LocationPage> {
       // given polygonId
       polygonId: PolygonId('1'),
       // initialize the list of points to display polygon
-      points: points,
+      // points: points,
       // given color to polygon
       fillColor: Colors.green.withOpacity(0.3),
       // given border color to polygon
@@ -88,13 +90,17 @@ class _LocationPageState extends State<LocationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GoogleMap(
+              Container(
+                height: MediaQuery.of(context).size.height * 0.7,
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: GoogleMap(
                   onMapCreated: _onMapCreated,
                   initialCameraPosition: CameraPosition(
                     target: _center,
-                    zoom: 11.0,
+                    zoom: 16.0,
                   ),
-                  polygons: _polygon),
+                ),
+              ),
               // add map here
               Text('Address: ${widget.proximityReminder.address}'),
               Text('Phone Number: ${widget.proximityReminder.phoneNumber}'),
