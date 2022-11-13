@@ -6,6 +6,10 @@ import dotenv
 dotenv.load_dotenv()
 google_key = os.environ['GOOGLE_KEY']
 
+# delete this when fully set up .env
+google_key = 'AIzaSyBx-u8WoCZX45wKIgJnPs50T63t_4inkSk'
+
+
 def address_to_geocode(address: str) -> list:
     # address = quote(address)
 
