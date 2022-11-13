@@ -1,6 +1,10 @@
 import requests
 from urllib.parse import quote
+import os
+import dotenv
 
+dotenv.load_dotenv()
+google_key = os.environ['GOOGLE_KEY']
 
 def address_to_geocode(address: str) -> list:
     # address = quote(address)
@@ -11,11 +15,11 @@ def address_to_geocode(address: str) -> list:
     # this is the sample google api format
     # https://maps.googleapis.com/maps/api/geocode/json?place_id=ChIJeRpOeF67j4AR9ydy_PIzPuM&key=YOUR_API_KEY
 
-    # url = 'https://maps.googleapis.com/maps/api/geocode/json?address={address}&key=AIzaSyBx-u8WoCZX45wKIgJnPs50T63t_4inkSk'.format(
+    # url = 'https://maps.googleapis.com/maps/api/geocode/json?address={address}&key=INSERT_KEY_HERE'.format(
     #     address=address)
 
     url = 'https://maps.googleapis.com/maps/api/geocode/json'
-    payload = {'address': address, 'key': 'AIzaSyBx-u8WoCZX45wKIgJnPs50T63t_4inkSk'}
+    payload = {'address': address, 'key': google_key}
 
     response = requests.get(url=url, params=payload)
     response = response.json()
@@ -38,7 +42,7 @@ def geocode_to_address(geocode: list) -> str:
     # print(geocode)
 
     url = 'https://maps.googleapis.com/maps/api/geocode/json'
-    payload = {'latlng': geocode, 'key': 'AIzaSyBx-u8WoCZX45wKIgJnPs50T63t_4inkSk'}
+    payload = {'latlng': geocode, 'key': google_key}
 
     response = requests.get(url=url, params=payload)
     response = response.json()
