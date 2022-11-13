@@ -1,15 +1,30 @@
 import requests
 import json
+from urllib.parse import quote
 
-address = "address=24%20Sussex%20Drive%20Ottawa%20ON"
 
-geocoder = '{"address" = address}'
-geocoder_json = json.dumps(geocoder)
+def address_to_geocode(address: str):
+    address = quote(address)
 
-# https://maps.googleapis.com/maps/api/geocode/json?place_id=ChIJeRpOeF67j4AR9ydy_PIzPuM&key=YOUR_API_KEY
+    geocoder = '{"address" = address}'
+    geocoder_json = json.dumps(geocoder)
 
-url = 'https://maps.googleapis.com/maps/api/geocode/json?' + address + '&key=AIzaSyBx-u8WoCZX45wKIgJnPs50T63t_4inkSk'
+    # this is the sample google api format
+    # https://maps.googleapis.com/maps/api/geocode/json?place_id=ChIJeRpOeF67j4AR9ydy_PIzPuM&key=YOUR_API_KEY
 
-response = requests.get(url=url)
-for item in response:
-    print(response.longitude)
+    url = 'https://maps.googleapis.com/maps/api/geocode/json?address={address}&key=AIzaSyBx-u8WoCZX45wKIgJnPs50T63t_4inkSk'.format(
+        address=address)
+
+    response = requests.get(url=url)
+    response = response.json()
+    
+    # this reads location data from the json file
+    # results[0] prints the first result, although there could be more
+    print(response['results'][0]['geometry']['location']['lat'])
+    print(response['results'][0]['geometry']['location']['lng'])
+    # this is how many response
+    print(len(response['results']))
+
+    return response['results'][0]['geometry']['location']['lat'], response['results'][0]['geometry']['location']['lng']
+
+print(address_to_geocode("santa clara university"))
