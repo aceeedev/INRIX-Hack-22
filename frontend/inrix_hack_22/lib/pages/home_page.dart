@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inrix_hack_22/models/proximity_reminder.dart';
 import 'package:inrix_hack_22/pages/form_page.dart';
-import 'package:inrix_hack_22/pages/location_page.dart';
 import 'package:inrix_hack_22/backend/database_manager.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,8 +9,6 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
-
-//new code
 
 class _HomePageState extends State<HomePage> {
   late List<ProximityReminder> proximityReminders;
