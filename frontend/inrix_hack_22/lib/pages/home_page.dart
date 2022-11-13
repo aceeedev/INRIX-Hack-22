@@ -3,6 +3,7 @@ import 'package:inrix_hack_22/models/proximity_reminder.dart';
 import 'package:inrix_hack_22/pages/form_page.dart';
 import 'package:inrix_hack_22/backend/database_manager.dart';
 import 'package:inrix_hack_22/pages/map_page.dart';
+import 'package:inrix_hack_22/globals.dart' as globals;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -47,8 +48,8 @@ class _HomePageState extends State<HomePage> {
         child: isLoading
             ? CircularProgressIndicator()
             : proximityReminders.isEmpty
-                ? const Text(
-                    'No Proximity Reminders',
+                ? Text(
+                    globals.homeLocation,
                   )
                 : buildProximityReminders(),
       ),
