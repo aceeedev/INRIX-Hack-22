@@ -76,8 +76,8 @@ class _LocationPageState extends State<LocationPage> {
     List<LatLng> pts = [];
     for (int i = 0; i < coords.length; i++) {
       print(coords[i][0] + coords[i][1]);
-      points.add(LatLng(
-          double.parse(coords[i][0]), double.parse(coords[i][0].trim())));
+      points
+          .add(LatLng(double.parse(coords[i][0]), double.parse(coords[i][0])));
     }
 
     if (mounted) {
