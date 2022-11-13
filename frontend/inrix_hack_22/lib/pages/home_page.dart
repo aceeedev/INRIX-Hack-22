@@ -4,6 +4,7 @@ import 'package:inrix_hack_22/pages/form_page.dart';
 import 'package:inrix_hack_22/backend/database_manager.dart';
 import 'package:inrix_hack_22/pages/map_page.dart';
 import 'package:inrix_hack_22/globals.dart' as globals;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,19 +41,34 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    late GoogleMapController mapController;
+
+    final LatLng _center = const LatLng(45.521563, -122.677433);
+
+    void _onMapCreated(GoogleMapController controller) {
+      mapController = controller;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Page'),
       ),
-      body: Center(
-        child: isLoading
-            ? CircularProgressIndicator()
-            : proximityReminders.isEmpty
-                ? Text(
-                    globals.homeLocation,
-                  )
-                : buildProximityReminders(),
+      body: GoogleMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: _center,
+          zoom: 11.0,
+        ),
       ),
+      // Center(
+      //   child: isLoading
+      //       ? CircularProgressIndicator()
+      //       : proximityReminders.isEmpty
+      //           ? Text(
+      //               globals.homeLocation,
+      //             )
+      //           : buildProximityReminders(),
+      // ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () async {
