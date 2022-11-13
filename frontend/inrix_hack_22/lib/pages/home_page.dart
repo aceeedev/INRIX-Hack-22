@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:inrix_hack_22/models/proximity_reminder.dart';
 import 'package:inrix_hack_22/pages/form_page.dart';
 import 'package:inrix_hack_22/backend/database_manager.dart';
@@ -36,6 +37,14 @@ class _HomePageState extends State<HomePage> {
     setState(() => isLoading = false);
   }
 
+  Future<void> askForPermission() async {
+    var status = await Permission.locationAlways.status;
+    if (!status.isGranted) {
+      // request access to the permission
+      await Permission.location.request();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +63,8 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () async {
+            await askForPermission();
+
             await Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const FormPage()));
             refreshProximityReminders();
