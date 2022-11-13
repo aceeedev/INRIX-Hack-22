@@ -48,8 +48,8 @@ class _HomePageState extends State<HomePage> {
         child: isLoading
             ? CircularProgressIndicator()
             : proximityReminders.isEmpty
-                ? Text(
-                    globals.homeLocation,
+                ?const Text(
+                    'Empty'
                   )
                 : buildProximityReminders(),
       ),
