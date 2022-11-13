@@ -33,6 +33,7 @@ class _FormPageState extends State<FormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Form Page"),
       ),
@@ -113,9 +114,11 @@ class _FormPageState extends State<FormPage> {
 
     listOfTextFields.add(ElevatedButton(
         onPressed: () {
-          if (formKey.currentState!.validate()) sendForm();
+          if (formKey.currentState!.validate()) {
+            sendForm();
 
-          Navigator.pop(context);
+            Navigator.pop(context);
+          }
         },
         child: const Icon(Icons.add)));
 
@@ -123,7 +126,7 @@ class _FormPageState extends State<FormPage> {
   }
 
   String? doubleValidator(value) {
-    if (value == null || value.isEmpty || double.tryParse(value) != null) {
+    if (value == null || value.isEmpty || double.tryParse(value) == null) {
       return 'Please enter a number';
     }
     return null;
