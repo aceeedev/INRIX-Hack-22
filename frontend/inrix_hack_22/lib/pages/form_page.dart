@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:inrix_hack_22/backend/database_manager.dart';
 import 'package:inrix_hack_22/models/proximity_reminder.dart';
+import 'package:inrix_hack_22/backend/database_manager.dart';
+import 'package:inrix_hack_22/backend/flask_api.dart';
 
 class FormPage extends StatefulWidget {
   const FormPage({super.key});
@@ -11,8 +12,6 @@ class FormPage extends StatefulWidget {
 
 class _FormPageState extends State<FormPage> {
   final addressTextController = TextEditingController();
-  final longTextController = TextEditingController();
-  final latTextController = TextEditingController();
   final etaTextController = TextEditingController();
   final phoneNumTextController = TextEditingController();
   final phoneNameTextController = TextEditingController();
@@ -23,8 +22,6 @@ class _FormPageState extends State<FormPage> {
   void dispose() {
     // dispose of text controllers
     addressTextController.dispose();
-    longTextController.dispose();
-    latTextController.dispose();
     etaTextController.dispose();
     phoneNumTextController.dispose();
     phoneNameTextController.dispose();
@@ -74,9 +71,13 @@ class _FormPageState extends State<FormPage> {
   }
 
   void sendForm() async {
+    // first find long and lat from address
+    Map<String, double> lonLat =
+        await getLonLatFromAddress(addressTextController.text);
+
     ProximityReminder proximityReminder = ProximityReminder(
-      longitude: double.parse(longTextController.text),
-      latitude: double.parse(latTextController.text),
+      longitude: lonLat['lon'] as double,
+      latitude: lonLat['lat'] as double,
       proximity: double.parse(etaTextController.text),
       address: addressTextController.text,
       phoneNumber: phoneNumTextController.text,
