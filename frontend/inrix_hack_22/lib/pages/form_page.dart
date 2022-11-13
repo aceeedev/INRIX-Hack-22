@@ -50,7 +50,7 @@ class _FormPageState extends State<FormPage> {
               },
               {
                 'controller': etaTextController,
-                'text': 'Proximity',
+                'text': 'How far to go before warning? (minutes)',
                 'validator': doubleValidator
               },
               {

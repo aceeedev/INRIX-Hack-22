@@ -58,12 +58,12 @@ class _MapPageState extends State<MapPage> {
           backgroundColor: Colors.green[700],
         ),
         body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
-          ),
-        ),
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: CameraPosition(
+              target: _center,
+              zoom: 11.0,
+            ),
+            polygons: _polygon),
       ),
     );
   }
