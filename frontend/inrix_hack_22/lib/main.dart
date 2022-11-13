@@ -29,11 +29,13 @@ void callbackDispatcher() {
             proximityReminder.longitude,
             proximityReminder.latitude);
 
-        print(insideMap['inside']);
+        print(proximityReminder.phoneNumberName);
         if (insideMap['inside'] == false) {
           sendMessage(
               "${proximityReminder.phoneNumberName}: Dependent is out of the ring",
               proximityReminder.phoneNumber);
+          await Future.delayed(
+              const Duration(milliseconds: 1100)); // 1 MSP Twilio rate limit
         }
       }
     }
