@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:inrix_hack_22/models/proximity_reminder.dart';
 import 'package:inrix_hack_22/pages/form_page.dart';
 import 'package:inrix_hack_22/backend/database_manager.dart';
 import 'package:inrix_hack_22/pages/map_page.dart';
-import 'package:inrix_hack_22/globals.dart' as globals;
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:inrix_hack_22/backend/geolocation.dart' as globals;
+//import 'package:inrix_hack_22/pages/map_page.dart';
+//import 'package:inrix_hack_22/globals.dart' as globals;
+//import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,6 +40,14 @@ class _HomePageState extends State<HomePage> {
     proximityReminders = await AppDatabase.instance.readAllProximityReminders();
 
     setState(() => isLoading = false);
+  }
+
+  Future<void> askForPermission() async {
+    var status = await Permission.locationAlways.status;
+    if (!status.isGranted) {
+      // request access to the permission
+      await Permission.location.request();
+    }
   }
 
   @override
