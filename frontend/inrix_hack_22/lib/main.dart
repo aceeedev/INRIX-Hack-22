@@ -47,9 +47,9 @@ void callbackDispatcher() {
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
+  runApp(const MyApp());
+
   Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
   Workmanager().registerOneOffTask(backgroundTask, backgroundTask,
       initialDelay: Duration(seconds: timeBetweenBackgroundTasks));
-
-  runApp(const MyApp());
 }
