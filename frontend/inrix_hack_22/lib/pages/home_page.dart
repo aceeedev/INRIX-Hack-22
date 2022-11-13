@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inrix_hack_22/models/proximity_reminder.dart';
 import 'package:inrix_hack_22/pages/form_page.dart';
 import 'package:inrix_hack_22/backend/database_manager.dart';
+import 'package:inrix_hack_22/pages/map_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -54,66 +55,69 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () async {
-            await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const FormPage()
-            ));
+            await Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const FormPage()));
             refreshProximityReminders();
           }),
-
     );
   }
 
-  Widget buildProximityReminders() => GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 5.0,
-          mainAxisSpacing: 5.0,
-          childAspectRatio: 0.5),
+  Widget buildProximityReminders() => ListView.builder(
       itemCount: proximityReminders.length,
       itemBuilder: (context, index) {
         ProximityReminder proximityReminder = proximityReminders[index];
 
         return Card(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-          proximityReminder.phoneNumberName,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+            Text(
+              proximityReminder.phoneNumberName,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
-              Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: Text(
-            'Phone: ${proximityReminder.phoneNumber}',
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.black,
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Text(
+                'Phone: ${proximityReminder.phoneNumber}',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
               ),
-              Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: Text(
-            'Longitute: ${proximityReminder.longitude}',
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.black,
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Text(
+                'Longitute: ${proximityReminder.longitude}',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
               ),
-              Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: Text(
-            'Latitude: ${proximityReminder.latitude}',
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.black,
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Text(
+                'Latitude: ${proximityReminder.latitude}',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
               ),
-            ]),
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () async {
+                int? id = proximityReminder.id;
+                if (id != null) {
+                  await AppDatabase.instance.deleteProximityReminder(id);
+                }
+                refreshProximityReminders();
+              },
+            )
+          ]),
         );
       });
 }
