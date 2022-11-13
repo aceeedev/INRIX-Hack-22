@@ -43,7 +43,9 @@ class _LocationPageState extends State<LocationPage> {
     _center = LatLng(
         widget.proximityReminder.latitude, widget.proximityReminder.longitude);
 
-    points = getPoints();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getPoints();
+    });
 
     // initialize the polygon
     _polygon.add(Polygon(
@@ -83,7 +85,8 @@ class _LocationPageState extends State<LocationPage> {
       points.add(LatLng(
           double.parse(coords[i][0]), double.parse(coords[i][0].trim())));
     }
-    print(points);
+
+    this.points = points;
   }
 
   void _onMapCreated(GoogleMapController controller) {

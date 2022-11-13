@@ -63,7 +63,7 @@ class _FormPageState extends State<FormPage> {
               },
               {
                 'controller': phoneNameTextController,
-                'text': 'Phone Number Name',
+                'text': 'Contact Name',
                 'validator': defaultValidator
               }
             ]),
@@ -73,7 +73,7 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  void sendForm() async {
+  Future<void> sendForm() async {
     // first find long and lat from address
     Map<String, dynamic> lonLat =
         await getLonLatFromAddress(addressTextController.text);
@@ -116,9 +116,9 @@ class _FormPageState extends State<FormPage> {
     }
 
     listOfTextFields.add(ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           if (formKey.currentState!.validate()) {
-            sendForm();
+            await sendForm();
 
             Navigator.pop(context);
           }
