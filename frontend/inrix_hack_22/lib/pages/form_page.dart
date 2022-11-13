@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inrix_hack_22/backend/database_manager.dart';
 import 'package:inrix_hack_22/models/proximity_reminder.dart';
-import 'package:inrix_hack_22/globals.dart' as globals;
+
 
 class FormPage extends StatefulWidget {
   const FormPage({super.key});
