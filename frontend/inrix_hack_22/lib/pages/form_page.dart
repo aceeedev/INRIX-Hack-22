@@ -96,6 +96,7 @@ class _FormPageState extends State<FormPage> {
     for (Map<String, dynamic> inputField in inputFields) {
       listOfTextFields.add(Text(
         inputField['text'],
+        textAlign: TextAlign.center,
         style: const TextStyle(
           fontSize: 24.0,
           fontWeight: FontWeight.bold,
