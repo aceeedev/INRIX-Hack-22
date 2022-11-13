@@ -62,18 +62,28 @@ class _LocationPageState extends State<LocationPage> {
   }
 
   getPoints() async {
-    Position pos = await determinePosition();
+    late Position pos;
+    try {
+      pos = await determinePosition();
+    } catch (e) {
+      print(e);
+    }
     var coords = (await checkIfInsideArea(
         pos.longitude,
         pos.latitude,
         widget.proximityReminder.proximity,
         widget.proximityReminder.longitude,
-        widget.proximityReminder.latitude))['coord'];
+        widget.proximityReminder.latitude))['coords'];
+
+    print(coords);
 
     List<LatLng> points = [];
     for (int i = 0; i < coords.length; i++) {
-      points.add(LatLng(coords[i][0], coords[i][1]));
+      print(coords[i][0] + coords[i][1]);
+      points.add(LatLng(
+          double.parse(coords[i][0]), double.parse(coords[i][0].trim())));
     }
+    print(points);
   }
 
   void _onMapCreated(GoogleMapController controller) {
