@@ -63,7 +63,7 @@ class _FormPageState extends State<FormPage> {
               },
               {
                 'controller': phoneNameTextController,
-                'text': 'Phone Number Name',
+                'text': 'Contact Name',
                 'validator': defaultValidator
               }
             ]),
