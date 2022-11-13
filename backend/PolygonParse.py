@@ -17,11 +17,11 @@ class DrivePolygon:
     ### Fetching
     Token = CredentialsManager().get_token()[0]
 
-    url = "https://api.iq.inrix.com/drivetimePolygons?center=" + str(target_location[0]) + "%7C" + str(target_location[1]) + "&rangeType=A&duration=42"
+    url = "https://api.iq.inrix.com/drivetimePolygons?center=" + str(target_location[0]) + "%7C" + str(target_location[1]) + "&rangeType=A&duration=" + str(time_length)
 
     payload={}
     headers = {
-    'Authorization': 'Bearer' + Token
+      'Authorization': 'Bearer ' + Token
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)

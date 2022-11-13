@@ -125,7 +125,11 @@ class _FormPageState extends State<FormPage> {
   }
 
   String? doubleValidator(value) {
-    if (value == null || value.isEmpty || double.tryParse(value) == null) {
+    if (value == null ||
+        value.isEmpty ||
+        double.tryParse(value) == null ||
+        double.parse(value) < 1 ||
+        double.parse(value) > 90) {
       return 'Please enter a number';
     }
     return null;
