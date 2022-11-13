@@ -69,11 +69,15 @@ class _LocationPageState extends State<LocationPage> {
         pos.latitude,
         widget.proximityReminder.proximity,
         widget.proximityReminder.longitude,
-        widget.proximityReminder.latitude))['coord'];
+        widget.proximityReminder.latitude))['coords'];
+
+    print(coords);
 
     List<LatLng> pts = [];
     for (int i = 0; i < coords.length; i++) {
-      points.add(LatLng(coords[i][0], coords[i][1]));
+      print(coords[i][0] + coords[i][1]);
+      points.add(LatLng(
+          double.parse(coords[i][0]), double.parse(coords[i][0].trim())));
     }
 
     if (mounted) {
