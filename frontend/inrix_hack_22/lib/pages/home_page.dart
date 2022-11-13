@@ -75,7 +75,6 @@ class _HomePageState extends State<HomePage> {
 
         return Card(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Spacer(),
               Text(
           proximityReminder.phoneNumberName,
           textAlign: TextAlign.center,
