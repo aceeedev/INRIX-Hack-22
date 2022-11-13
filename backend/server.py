@@ -3,6 +3,7 @@ from credentials_manager import CredentialsManager
 from twilio.rest import Client
 from twilio.rest import TwilioException
 from credentials import TWILIO_TOKEN, TWILIO_ACCOUNT_SID, SEND_NUMBER
+from PolygonParse import DrivePolygon
 
 # Create flask app object
 app = Flask(__name__)
@@ -10,7 +11,9 @@ app = Flask(__name__)
 
 @app.route("/")
 def placeholder():
-    return "<h1>Hi This is our Api for the Inrix Hack</h1>"
+    return f"<h1>Hi This is our Api for the Inrix Hack</h1> \
+    <p>{CredentialsManager().get_token()[0]}</p> \
+    "
 
 
 # decorator includes route and the method that the function supports
@@ -57,6 +60,22 @@ def send_message():
             "message": "Server error. Likely an invalid phone number."
         }, 500
 
+@app.route("/checkdistance")
+def check_distance():
+    my_lon = request.args.get("my_lon")
+    my_lat = request.args.get("my_lat")
+    time_thresh = request.args.get("time_thresh")
+    lon = request.args.get("lon")
+    lat = request.args.get("lat")
+    #return jsonify({"a": my_lon, "b":my_lat, "c": time_thresh, "d":lon, "e":lat}), 200
+
+    my_coord = (my_lon, my_lat)
+    target_coord = (lon, lat)
+    dpoly = DrivePolygon(time_thresh, target_coord)
+    valid = dpoly.check(my_coord)
+    #if valid:
+
+    return jsonify({"inside": valid}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
