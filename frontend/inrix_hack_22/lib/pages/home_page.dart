@@ -87,50 +87,66 @@ class _HomePageState extends State<HomePage> {
                     LocationPage(proximityReminder: proximityReminder),
               ));
             },
-            child: Card(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+              child: Card(
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Text(
-                      proximityReminder.phoneNumberName,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () async {
+                          int? id = proximityReminder.id;
+                          if (id != null) {
+                            await AppDatabase.instance
+                                .deleteProximityReminder(id);
+                          }
+                          refreshProximityReminders();
+                        },
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: Text(
-                        'Phone: ${proximityReminder.phoneNumber}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: Text(
-                        'Address: ${proximityReminder.address}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () async {
-                        int? id = proximityReminder.id;
-                        if (id != null) {
-                          await AppDatabase.instance
-                              .deleteProximityReminder(id);
-                        }
-                        refreshProximityReminders();
-                      },
-                    ),
-                  ]),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            child: Text(
+                              proximityReminder.phoneNumberName,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 18),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: Text(
+                              'Address: ${proximityReminder.address}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: Text(
+                              'Phone: ${proximityReminder.phoneNumber}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ])
+                  ],
+                ),
+              ),
             ));
       });
 }
