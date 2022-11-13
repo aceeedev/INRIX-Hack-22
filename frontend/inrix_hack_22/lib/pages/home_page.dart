@@ -65,15 +65,12 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: /*() async {
+          onPressed: () async {
             await askForPermission();
             await Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const FormPage()));
 
-            refreshProximityReminders();
-          }),*/
-              () {
-            sendMessage('Sup', '+18588481710');
+            await refreshProximityReminders();
           }),
     );
   }

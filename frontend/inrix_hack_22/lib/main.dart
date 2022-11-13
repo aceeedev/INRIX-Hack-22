@@ -28,6 +28,8 @@ void callbackDispatcher() {
             proximityReminder.proximity,
             proximityReminder.longitude,
             proximityReminder.latitude);
+
+        print(insideMap['inside']);
         if (insideMap['inside'] == false) {
           sendMessage(
               "${proximityReminder.phoneNumberName}: Dependent is out of the ring",
