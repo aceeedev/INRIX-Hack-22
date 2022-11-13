@@ -31,9 +31,9 @@ void callbackDispatcher() {
 
         print(proximityReminder.phoneNumberName);
         if (insideMap['inside'] == false) {
-          /*sendMessage(
+          sendMessage(
               "${proximityReminder.phoneNumberName}: Dependent is out of the ring",
-              proximityReminder.phoneNumber);*/
+              proximityReminder.phoneNumber);
           await Future.delayed(
               const Duration(milliseconds: 1100)); // 1 MSP Twilio rate limit
         }
