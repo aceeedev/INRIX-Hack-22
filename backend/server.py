@@ -74,7 +74,6 @@ def check_distance():
     target_coord = (lon, lat)
     dpoly = DrivePolygon(time_thresh, target_coord)
     valid = dpoly.check(my_coord)
-    #if valid:
 
     return jsonify({"inside": valid}), 200
 

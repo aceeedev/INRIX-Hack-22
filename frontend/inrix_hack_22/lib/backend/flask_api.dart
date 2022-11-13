@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:http/http.dart' as http;
 
 String apiUrl = 'http://172.31.138.220:5000';
 
-void findDistanceFromAPI(double myLon, double myLat, double timeThresh,
-    double lon, double lat) async {
+Future<Map<String, dynamic>> checkIfInsideArea(double myLon, double myLat,
+    double timeThresh, double lon, double lat) async {
   String endpoint = '/checkdistance';
 
   var response = await http.Client().get(Uri.parse(
@@ -12,27 +13,13 @@ void findDistanceFromAPI(double myLon, double myLat, double timeThresh,
 
   if (response.statusCode == 200) {
     Map<String, dynamic> json = jsonDecode(response.body);
+    return json['inside'];
   } else {
     throw Exception('Response code was not 200, was ${response.statusCode}');
   }
 }
 
 Future<Map<String, dynamic>> getLonLatFromAddress(String address) async {
-  /*var request = http.Request(
-      'GET',
-      Uri.parse(
-          'http://127.0.0.1:5000/getcoordinates?address=Santa%20Clara%20University'));
-
-  http.StreamedResponse response = await request.send();
-
-  if (response.statusCode == 200) {
-    Map<String, double> json =
-        jsonDecode(await response.stream.bytesToString());
-
-    return json;
-  } else {
-    throw Exception('Response code was not 200, was ${response.reasonPhrase}');
-  }*/
   String endpoint = '/getcoordinates';
 
   var response =
@@ -41,6 +28,19 @@ Future<Map<String, dynamic>> getLonLatFromAddress(String address) async {
   if (response.statusCode == 200) {
     Map<String, dynamic> json = jsonDecode(response.body);
     return json;
+  } else {
+    throw Exception('Response code was not 200, was ${response.statusCode}');
+  }
+}
+
+void sendMessage(String message, String phoneNumber) async {
+  String endpoint = '/sendmessage';
+
+  var response = await http.Client()
+      .get(Uri.parse('$apiUrl$endpoint?message=$message&number=$phoneNumber'));
+
+  if (response.statusCode == 200) {
+    Map<String, dynamic> json = jsonDecode(response.body);
   } else {
     throw Exception('Response code was not 200, was ${response.statusCode}');
   }
