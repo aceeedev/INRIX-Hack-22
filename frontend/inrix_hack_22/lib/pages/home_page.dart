@@ -77,55 +77,56 @@ class _HomePageState extends State<HomePage> {
         ProximityReminder proximityReminder = proximityReminders[index];
 
         return GestureDetector(
-          onTap: () async {
-            await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  LocationPage(proximityReminder: proximityReminder),
+            onTap: () async {
+              await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    LocationPage(proximityReminder: proximityReminder),
+              ));
+            },
+            child: Card(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      proximityReminder.phoneNumberName,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                        'Phone: ${proximityReminder.phoneNumber}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                        'Address: ${proximityReminder.latitude}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () async {
+                        int? id = proximityReminder.id;
+                        if (id != null) {
+                          await AppDatabase.instance
+                              .deleteProximityReminder(id);
+                        }
+                        refreshProximityReminders();
+                      },
+                    ),
+                  ]),
             ));
-          },
-          child: Card(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                proximityReminder.phoneNumberName,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Text(
-                  'Phone: ${proximityReminder.phoneNumber}',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Text(
-                  'Address: ${proximityReminder.latitude}',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () async {
-                int? id = proximityReminder.id;
-                if (id != null) {
-                  await AppDatabase.instance.deleteProximityReminder(id);
-                }
-                refreshProximityReminders();
-              },
-            )
-          ]),
-        );
       });
 }
