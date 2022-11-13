@@ -32,9 +32,31 @@ class LocationPage extends StatefulWidget {
 }
 
 class _LocationPageState extends State<LocationPage> {
+  late GoogleMapController mapController;
+  late LatLng _center;
+  Set<Polygon> _polygon = HashSet<Polygon>();
+
   @override
   void initState() {
     super.initState();
+    _center = LatLng(
+        widget.proximityReminder.latitude, widget.proximityReminder.longitude);
+
+    // initialize the polygon
+    _polygon.add(Polygon(
+      // given polygonId
+      polygonId: PolygonId('1'),
+      // initialize the list of points to display polygon
+      // points: points,
+      // given color to polygon
+      fillColor: Colors.green.withOpacity(0.3),
+      // given border color to polygon
+      strokeColor: Colors.green,
+      geodesic: true,
+      // given width of border
+      strokeWidth: 4,
+    ));
+
     // determinePositionWrapper();
     // checkIfInsideAreaWrapper(
     //     position.longitude,
@@ -49,16 +71,12 @@ class _LocationPageState extends State<LocationPage> {
   //   position = await determinePosition();
   // }
 
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // for google maps initialization
-    late GoogleMapController mapController;
-    final LatLng _center = LatLng(
-        widget.proximityReminder.latitude, widget.proximityReminder.longitude);
-    void _onMapCreated(GoogleMapController controller) {
-      mapController = controller;
-    }
-
     // List coords = checkIfInsideAreaWrap(
     //     position.longitude,
     //     position.latitude,
@@ -78,23 +96,6 @@ class _LocationPageState extends State<LocationPage> {
     //   LatLng(37.348064, -121.937111),
     //   LatLng(37.346617, -121.941263),
     // ];
-    Set<Polygon> _polygon = HashSet<Polygon>();
-
-    // initialize the polygon
-    _polygon.add(Polygon(
-      // given polygonId
-      polygonId: PolygonId('1'),
-      // initialize the list of points to display polygon
-      // points: points,
-      // given color to polygon
-      fillColor: Colors.green.withOpacity(0.3),
-      // given border color to polygon
-      strokeColor: Colors.green,
-      geodesic: true,
-      // given width of border
-      strokeWidth: 4,
-    ));
-
     return Scaffold(
       appBar: AppBar(title: const Text("Location Page")),
       body: SafeArea(
