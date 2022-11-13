@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-void sendToAPI() async {
-  String apiUrl = 'localhost.localhost:3000/';
-  String endpoint = '';
+void sendToAPI(double myLon, double myLat, double timeThresh, double lon,
+    double lat) async {
+  String apiUrl = 'localhost.localhost:3000';
+  String endpoint = '/checkdistance';
 
-  var response = await http.Client().get(Uri.parse('$apiUrl$endpoint'));
+  var response = await http.Client().get(Uri.parse(
+      '$apiUrl$endpoint?my_lon=$myLon&my_lat=$myLat&time_thresh=$timeThresh&lon=$lon&lat=&lat'));
 
   if (response.statusCode == 200) {
     Map<String, dynamic> json = jsonDecode(response.body);
