@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inrix_hack_22/backend/database_manager.dart';
 import 'package:inrix_hack_22/models/proximity_reminder.dart';
 
+
 class FormPage extends StatefulWidget {
   const FormPage({super.key});
 
@@ -10,6 +11,7 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
+  final addressTextController = TextEditingController();
   final longTextController = TextEditingController();
   final latTextController = TextEditingController();
   final etaTextController = TextEditingController();
@@ -21,6 +23,7 @@ class _FormPageState extends State<FormPage> {
   @override
   void dispose() {
     // dispose of text controllers
+    addressTextController.dispose();
     longTextController.dispose();
     latTextController.dispose();
     etaTextController.dispose();
@@ -44,6 +47,11 @@ class _FormPageState extends State<FormPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: createTextForms([
+              {
+                'controller': addressTextController,
+                'text': 'Address',
+                'validator': doubleValidator
+              },
               {
                 'controller': longTextController,
                 'text': 'Longitude',
