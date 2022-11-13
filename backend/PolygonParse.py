@@ -1,27 +1,48 @@
 import requests
+from credentials_manager import CredentialsManager
+#import matplotlib.pyplot as plt
+from shapely.geometry import Point, Polygon
 
-url = "https://api.iq.inrix.com/drivetimePolygons?center=37.7705%7C-122.446527&rangeType=A&duration=30 "
+# x = []
+# y = []
+# for i, j in coords:
+#   x.append(i)
+#   y.append(j)
 
-payload={}
-headers = {
-  'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBJZCI6Im8zbTk3bHB5bzMiLCJ0b2tlbiI6eyJpdiI6IjhjNjM0NGFmZjc4NDIyODdhZGZkYjcxOWUzMzdkYWE2IiwiY29udGVudCI6IjVhZjUwZDU0YjgwOTljMmJkZTViMDNlZmY5ZTM0MzdlOGFjMmMxNzJkMjFkMjFjMjA0NzQxYjgxNDJhYmM1OTg0ZDYwNmU1N2M1OGQyMTkzYzg0OGUyYjNmYjZiZjY2NzVjN2M0ZmFkNDc0NTE3NjQ2ZGJlYzA0MmUxYmI3YjM1OTk3OTI2ZWE5Yzg3OGI3ZDE5N2ExY2VlZjRkZGI3ZmY1ZTMwM2RiYmM5NWYxZjJlNzA0NTE2ZmFiMzg2MTZjOTZiNmY1ZjFjMzUzOWNhZTUwYWQ3ZTIyODVkZWFkMWI5ZjNiNDFjYjRjZDRmYmE2NTEwZjBkMDMyMmU3YTJlNDJlODk2ZjdjM2E5YThiNTMyNzc0MTY1NjFjNzdiYmMyNzQ5OWQxNmM4NzdmMzQyN2VmYTA1YmY4NmUyNGEwMjRiNjk4NWVmYWQ3Nzk2NjY4ZmU1NzJiMzY0NTU5MTg4OGZhZTgxODhjZDU3NmE3MTRkMzQxYWQyNDAyYjRhY2QyYjMyNTBjYzZkNjIxZDAyMmQ1NTc4ZmEyNjA1Nzk3ZjZkMWFjMTZlZmJkOGI3MDgyYzI2NGRjNjgzYTc3ZTFhNTQ3ZTVjNDU3ZWZkMTMyZmM3ZjgwMmQzZmEyZDcwYjRiN2NjZDM5OWIxYjdkODc0MjhiMWMzNzlkYTk5NDE3MjIwMjRmMzk2NjU2MzNkOGQ5YWVjOGJmNGIzNTY1MzIyNzA1YTFlMjZiZjcwODRhNjY0YWY4ZTdmNmZiY2MxNTVmZmYxN2FjZTk5MGU3YTJjMDgwYTcyZDI5YzgzMjc1NzI5YmM3MjVkZmU3ZGRhZTVkM2JiODc5ZTFkNmVkZmJhODNiNzBiMjhlOTU2YWM2M2RlYjViZDk4In0sInNlY3VyaXR5VG9rZW4iOnsiaXYiOiI4YzYzNDRhZmY3ODQyMjg3YWRmZGI3MTllMzM3ZGFhNiIsImNvbnRlbnQiOiI2ZmZkNzc2NTk2MzZiNDNiZTQ3YTIzZTRlMWYwNTAyNWI1OWJlYTY1YWMxYjRhYjMxZjYzM2NmNjVhZWFlMzk1NzE3YTZmMGNhOGEzNmJiY2QxNjZmYjhkIn0sImp0aSI6IjVkYzMyZWM5LTViMDUtNDA0Ny04OTI4LTU0MWZlMDJiZjcxMSIsImlhdCI6MTY2ODI5MzE1MywiZXhwIjoxNjY4Mjk2NzUzfQ.mKpMCMJ8dO-wV6FhQkwDpk95WX1DfAt_WD2bC7nHhjw'
-}
+class DrivePolygon:
+  def __init__(self, time_length, target_location):
+    self.generate(time_length, target_location)
 
-response = requests.request("GET", url, headers=headers, data=payload)
+  def generate(self, time_length, target_location):
+    ### Fetching
+    Token = CredentialsManager().get_token()[0]
 
-###
+    url = "https://api.iq.inrix.com/drivetimePolygons?center=" + str(target_location[0]) + "%7C" + str(target_location[1]) + "&rangeType=A&duration=42"
 
-coords_string = response.text[314:(len(response.text) - 75)]
-print(len(coords_string))
+    payload={}
+    headers = {
+    'Authorization': 'Bearer' + Token
+    }
 
-# print(coords_string[2054:])
+    response = requests.request("GET", url, headers=headers, data=payload)
 
-#[314:]
+    ### Parsing
+    coords_string = response.text[314:(len(response.text) - 75)]
+    coords1D = coords_string.split(' ')
+    coords = []
+    for i in range(0, len(coords1D), 2):
+      coords.append((float(coords1D[i]), float(coords1D[i+1])))
 
-coords1D = coords_string.split(' ')
+    ### Turn into Shapely Object
+    self.poly = Polygon(coords)
 
-coords = []
-for i in range(0, len(coords1D), 2):
-    coords.append((float(coords1D[i]), float(coords1D[i+1])))
+  def check(self, my_coords):
+    p = Point(float(my_coords[0]), float(my_coords[1]))
+    return print(p.within(self.poly))
 
-print(coords)
+
+# c = ('37.770315', '-122.446527')
+# test = DrivePolygon(54, c)
+
+# print(test.poly)
+
