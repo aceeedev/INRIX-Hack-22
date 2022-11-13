@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 from credentials_manager import CredentialsManager
 from twilio.rest import Client
 from twilio.rest import TwilioException
-from credentials import TWILIO_TOKEN, TWILIO_ACCOUNT_SID, SEND_NUMBER
 from PolygonParse import DrivePolygon
 from geocoding import address_to_geocode
 import os
@@ -47,7 +46,6 @@ def send_message():
             from_=os.environ.get("TWILIO_PHONE_NUMBER"),
             body=client_message)
 
-        print("here")
         if message.status == "queued":
             return {
                 "message": client_message,
