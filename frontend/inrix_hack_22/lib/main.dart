@@ -16,17 +16,22 @@ void callbackDispatcher() {
     // runs when background worker goes off:
     print("---Background task executed: $backgroundTask---");
 
-    Position position = await determinePosition();
     List<ProximityReminder> proximityReminders =
         await AppDatabase.instance.readAllProximityReminders();
     if (proximityReminders.isNotEmpty) {
+      Position position = await determinePosition();
+
       for (ProximityReminder proximityReminder in proximityReminders) {
-        findDistanceFromAPI(
+        if ((await checkIfInsideArea(
             position.longitude,
             position.latitude,
             proximityReminder.proximity,
             proximityReminder.longitude,
-            proximityReminder.latitude);
+            proximityReminder.latitude))['inside']) {
+          sendMessage(
+              "${proximityReminder.phoneNumberName}: Dependent is out of the ring",
+              proximityReminder.phoneNumber);
+        }
       }
     }
 
@@ -42,9 +47,9 @@ void callbackDispatcher() {
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
+  runApp(const MyApp());
+
   Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
   Workmanager().registerOneOffTask(backgroundTask, backgroundTask,
       initialDelay: Duration(seconds: timeBetweenBackgroundTasks));
-
-  runApp(const MyApp());
 }
