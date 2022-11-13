@@ -37,8 +37,6 @@ def address_to_geocode(address: str) -> list:
 
     return response['results'][0]['geometry']['location']['lat'], response['results'][0]['geometry']['location']['lng']
 
-print(address_to_geocode("santa clara university"))
-
 # [lat, lang]
 def geocode_to_address(geocode: list) -> str:
     # convert geocode into a single string
@@ -55,5 +53,3 @@ def geocode_to_address(geocode: list) -> str:
     # print('\n\n\n')
     # print(response['results'][0]['formatted_address'])
     return response['results'][0]['formatted_address']
-
-print(geocode_to_address([37.3496418, -121.9389875]))
