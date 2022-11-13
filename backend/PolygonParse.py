@@ -1,63 +1,48 @@
 import requests
 from credentials_manager import CredentialsManager
-
-Token = CredentialsManager().get_token()[0]
-
-# print(Token)
-
-### Fetching
-
-url = "https://api.iq.inrix.com/drivetimePolygons?center=37.7705%7C-122.446527&rangeType=A&duration=42 "
-
-payload={}
-headers = {
-  'Authorization': 'Bearer' + Token
-}
-
-response = requests.request("GET", url, headers=headers, data=payload)
-
-### Parsing
-
-coords_string = response.text[314:(len(response.text) - 75)]
-print(len(coords_string))
-
-coords1D = coords_string.split(' ')
-
-coords = []
-for i in range(0, len(coords1D), 2):
-    coords.append((float(coords1D[i]), float(coords1D[i+1])))
-
-#print(coords)
-
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from shapely.geometry import Point, Polygon
 
-# Create Point objects
-p1 = Point(37.83, -122.48)
-p2 = Point(coords[24][0], coords[24][1])
-p3 = Point(37.67, -122.66)
-p4 = Point(37.74, -122.47)
+# x = []
+# y = []
+# for i, j in coords:
+#   x.append(i)
+#   y.append(j)
 
-# Create a square
-poly = Polygon(coords)
+class DrivePolygon:
+  def __init__(self, time_length, target_location):
+    self.generate(time_length, target_location)
 
-# PIP test with 'within'
-print(p1.within(poly))   # True
-print(p2.within(poly)) 
-print(p3.within(poly))
-print(p4.within(poly))
+  def generate(self, time_length, target_location):
+    ### Fetching
+    Token = CredentialsManager().get_token()[0]
 
-# plt.plot(coords)
+    url = "https://api.iq.inrix.com/drivetimePolygons?center=" + str(target_location[0]) + "%7C" + str(target_location[1]) + "&rangeType=A&duration=42"
 
-x = []
-y = []
-for i, j in coords:
-  x.append(i)
-  y.append(j)
+    payload={}
+    headers = {
+    'Authorization': 'Bearer' + Token
+    }
 
-plt.plot(x, y)
-plt.plot(37.83, -122.48, 'go')
-plt.plot(coords[24][0], coords[24][1], 'ro')
-plt.plot(37.67, -122.54, 'ro')
-plt.plot(37.74, -122.47, 'go')
-plt.show()
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    ### Parsing
+    coords_string = response.text[314:(len(response.text) - 75)]
+    coords1D = coords_string.split(' ')
+    coords = []
+    for i in range(0, len(coords1D), 2):
+      coords.append((float(coords1D[i]), float(coords1D[i+1])))
+
+    ### Turn into Shapely Object
+    self.poly = Polygon(coords)
+
+  def check(self, my_coords):
+    p = Point(float(my_coords[0]), float(my_coords[1]))
+    return print(p.within(self.poly))
+
+
+# c = ('37.770315', '-122.446527')
+# test = DrivePolygon(54, c)
+
+# print(test.poly)
+
