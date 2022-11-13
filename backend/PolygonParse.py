@@ -32,21 +32,19 @@ class DrivePolygon:
     coords = []
     for i in range(0, len(coords1D), 2):
       coords.append((float(coords1D[i]), float(coords1D[i+1])))
-    print(coords)
-
 
     ### Turn into Shapely Object
-    self.poly = Polygon(coords)
+    self.coords = coords
 
   def check(self, my_coords):
     p = Point(float(my_coords[0]), float(my_coords[1]))
-    return p.within(self.poly)
+    return p.within(Polygon(self.coords))
 
 
 # c = ('37.770315', '-122.446527')
 # test = DrivePolygon(54.44, c)
 
-# print(test.poly)
+# print(test.coords)
 
 # print(test.check(('37.770315', '-122.446527')))
 

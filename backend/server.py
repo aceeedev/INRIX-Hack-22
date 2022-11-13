@@ -76,7 +76,7 @@ def check_distance():
     valid = dpoly.check(my_coord)
     #if valid:
 
-    return jsonify({"inside": valid}), 200
+    return jsonify({"inside": valid, "coords": dpoly.coords}), 200
 
 @app.route("/getcoordinates")
 def get_coords():
