@@ -34,6 +34,7 @@ CREATE TABLE $tableProximity (
   ${ProximityFields.id} $idType,
   ${ProximityFields.longitude} $floatType,
   ${ProximityFields.latitude} $floatType,
+  ${ProximityFields.address} $textType,
   ${ProximityFields.proximity} $floatType,
   ${ProximityFields.phoneNumber} $textType,
   ${ProximityFields.phoneNumberName} $textType

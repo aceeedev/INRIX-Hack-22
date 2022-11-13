@@ -5,6 +5,7 @@ class ProximityFields {
     id,
     longitude,
     latitude,
+    address,
     proximity,
     phoneNumber,
     phoneNumberName
@@ -13,6 +14,7 @@ class ProximityFields {
   static const String id = '_id';
   static const String longitude = 'longitude';
   static const String latitude = 'latitude';
+  static const String address = 'address';
   static const String proximity = 'proximity';
   static const String phoneNumber = 'phoneNumber';
   static const String phoneNumberName = 'phoneNumberName';
@@ -22,6 +24,7 @@ class ProximityReminder {
   final int? id;
   final double longitude;
   final double latitude;
+  final String address;
   final double proximity;
   final String phoneNumber;
   final String phoneNumberName;
@@ -30,6 +33,7 @@ class ProximityReminder {
     this.id,
     required this.longitude,
     required this.latitude,
+    required this.address,
     required this.proximity,
     required this.phoneNumber,
     required this.phoneNumberName,
@@ -39,6 +43,7 @@ class ProximityReminder {
     int? id,
     double? longitude,
     double? latitude,
+    String? address,
     double? proximity,
     String? phoneNumber,
     String? phoneNumberName,
@@ -47,6 +52,7 @@ class ProximityReminder {
         id: id ?? this.id,
         longitude: longitude ?? this.longitude,
         latitude: latitude ?? this.latitude,
+        address: address ?? this.address,
         proximity: proximity ?? this.proximity,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         phoneNumberName: phoneNumberName ?? this.phoneNumberName,
@@ -56,6 +62,7 @@ class ProximityReminder {
         ProximityFields.id: id,
         ProximityFields.longitude: longitude,
         ProximityFields.latitude: latitude,
+        ProximityFields.address: address,
         ProximityFields.proximity: proximity,
         ProximityFields.phoneNumber: phoneNumber,
         ProximityFields.phoneNumberName: phoneNumberName
@@ -66,6 +73,7 @@ class ProximityReminder {
         id: json[ProximityFields.id] as int?,
         longitude: json[ProximityFields.longitude] as double,
         latitude: json[ProximityFields.latitude] as double,
+        address: json[ProximityFields.address] as String,
         proximity: json[ProximityFields.proximity] as double,
         phoneNumber: json[ProximityFields.phoneNumber] as String,
         phoneNumberName: json[ProximityFields.phoneNumberName] as String,
