@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10.0),
                       child: Text(
-                        'Address: ${proximityReminder.latitude}',
+                        'Address: ${proximityReminder.address}',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Colors.black,
