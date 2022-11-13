@@ -26,6 +26,8 @@ class DrivePolygon:
 
     response = requests.request("GET", url, headers=headers, data=payload)
 
+    response.raise_for_status()
+    
     ### Parsing
     coords_string = response.text[314:(len(response.text) - 75)]
     coords1D = coords_string.split(' ')
