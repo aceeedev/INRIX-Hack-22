@@ -4,6 +4,7 @@ from twilio.rest import Client
 from twilio.rest import TwilioException
 from credentials import TWILIO_TOKEN, TWILIO_ACCOUNT_SID, SEND_NUMBER
 from PolygonParse import DrivePolygon
+from geocoding import address_to_geocode
 
 # Create flask app object
 app = Flask(__name__)
@@ -77,7 +78,15 @@ def check_distance():
 
     return jsonify({"inside": valid}), 200
 
+@app.route("/getcoordinates")
+def get_coords():
+    address = request.args.get("address")
+    lat, lon = address_to_geocode(address)
+    return jsonify({"lat": lat, "lon": lon}), 200
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+
 
 # show this change

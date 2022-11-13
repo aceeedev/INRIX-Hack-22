@@ -44,7 +44,7 @@ class DrivePolygon:
 
 
 # c = ('37.770315', '-122.446527')
-# test = DrivePolygon(54, c)
+# test = DrivePolygon(54.44, c)
 
 # print(test.poly)
 
