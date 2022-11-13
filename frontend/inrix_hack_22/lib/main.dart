@@ -21,7 +21,7 @@ void callbackDispatcher() {
         await AppDatabase.instance.readAllProximityReminders();
     if (proximityReminders.isNotEmpty) {
       for (ProximityReminder proximityReminder in proximityReminders) {
-        sendToAPI(
+        findDistanceFromAPI(
             position.longitude,
             position.latitude,
             proximityReminder.proximity,

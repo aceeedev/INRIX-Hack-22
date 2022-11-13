@@ -49,17 +49,7 @@ class _FormPageState extends State<FormPage> {
               {
                 'controller': addressTextController,
                 'text': 'Address',
-                'validator': doubleValidator
-              },
-              {
-                'controller': longTextController,
-                'text': 'Longitude',
-                'validator': doubleValidator
-              },
-              {
-                'controller': latTextController,
-                'text': 'Latitude',
-                'validator': doubleValidator
+                'validator': defaultValidator
               },
               {
                 'controller': etaTextController,
@@ -88,6 +78,7 @@ class _FormPageState extends State<FormPage> {
       longitude: double.parse(longTextController.text),
       latitude: double.parse(latTextController.text),
       proximity: double.parse(etaTextController.text),
+      address: addressTextController.text,
       phoneNumber: phoneNumTextController.text,
       phoneNumberName: phoneNameTextController.text,
     );
