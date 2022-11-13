@@ -51,7 +51,7 @@ class _FormPageState extends State<FormPage> {
               {
                 'controller': etaTextController,
                 'text': 'How far to go before warning? (minutes)',
-                'validator': doubleValidator
+                'validator': intValidator
               },
               {
                 'controller': phoneNumTextController,
@@ -78,7 +78,7 @@ class _FormPageState extends State<FormPage> {
     ProximityReminder proximityReminder = ProximityReminder(
       longitude: lonLat['lon'] as double,
       latitude: lonLat['lat'] as double,
-      proximity: double.parse(etaTextController.text),
+      proximity: int.parse(etaTextController.text),
       address: addressTextController.text,
       phoneNumber: phoneNumTextController.text,
       phoneNumberName: phoneNameTextController.text,
@@ -124,12 +124,12 @@ class _FormPageState extends State<FormPage> {
     return listOfTextFields;
   }
 
-  String? doubleValidator(value) {
+  String? intValidator(value) {
     if (value == null ||
         value.isEmpty ||
-        double.tryParse(value) == null ||
-        double.parse(value) < 1 ||
-        double.parse(value) > 90) {
+        int.tryParse(value) == null ||
+        int.parse(value) < 1 ||
+        int.parse(value) > 90) {
       return 'Please enter a number';
     }
     return null;

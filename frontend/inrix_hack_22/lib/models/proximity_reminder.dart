@@ -25,7 +25,7 @@ class ProximityReminder {
   final double longitude;
   final double latitude;
   final String address;
-  final double proximity;
+  final int proximity;
   final String phoneNumber;
   final String phoneNumberName;
 
@@ -44,7 +44,7 @@ class ProximityReminder {
     double? longitude,
     double? latitude,
     String? address,
-    double? proximity,
+    int? proximity,
     String? phoneNumber,
     String? phoneNumberName,
   }) =>
@@ -74,7 +74,7 @@ class ProximityReminder {
         longitude: json[ProximityFields.longitude] as double,
         latitude: json[ProximityFields.latitude] as double,
         address: json[ProximityFields.address] as String,
-        proximity: json[ProximityFields.proximity] as double,
+        proximity: json[ProximityFields.proximity] as int,
         phoneNumber: json[ProximityFields.phoneNumber] as String,
         phoneNumberName: json[ProximityFields.phoneNumberName] as String,
       );

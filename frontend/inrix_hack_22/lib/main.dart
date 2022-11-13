@@ -22,12 +22,13 @@ void callbackDispatcher() {
       Position position = await determinePosition();
 
       for (ProximityReminder proximityReminder in proximityReminders) {
-        if ((await checkIfInsideArea(
+        final insideMap = await checkIfInsideArea(
             position.longitude,
             position.latitude,
             proximityReminder.proximity,
             proximityReminder.longitude,
-            proximityReminder.latitude))['inside']) {
+            proximityReminder.latitude);
+        if (insideMap['inside'] == false) {
           sendMessage(
               "${proximityReminder.phoneNumberName}: Dependent is out of the ring",
               proximityReminder.phoneNumber);
@@ -48,6 +49,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(const MyApp());
+  Workmanager().cancelAll();
 
   Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
   Workmanager().registerOneOffTask(backgroundTask, backgroundTask,

@@ -16,17 +16,19 @@ class DrivePolygon:
   def generate(self, time_length, target_location):
     ### Fetching
     Token = CredentialsManager().get_token()[0]
+    print(Token)
 
     url = "https://api.iq.inrix.com/drivetimePolygons?center=" + str(target_location[0]) + "%7C" + str(target_location[1]) + "&rangeType=A&duration=" + str(time_length)
 
-    payload={}
     headers = {
-      'Authorization': 'Bearer ' + Token
+      'Authorization': 'Bearer ' + str(Token),
+      'accept': 'text/xml'
     }
 
-    response = requests.request("GET", url, headers=headers, data=payload)
-
+    response = requests.get(url=url, headers=headers)
+    print('here')
     response.raise_for_status()
+    print('there')
     
     ### Parsing
     coords_string = response.text[314:(len(response.text) - 75)]

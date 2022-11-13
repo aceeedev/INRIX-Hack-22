@@ -5,6 +5,7 @@ from twilio.rest import TwilioException
 from credentials import TWILIO_TOKEN, TWILIO_ACCOUNT_SID, SEND_NUMBER
 from PolygonParse import DrivePolygon
 from geocoding import address_to_geocode
+import os
 
 # Create flask app object
 app = Flask(__name__)
@@ -34,7 +35,7 @@ def test_api():
 def send_message():
     phone_number = request.args.get("number")
     client_message = request.args.get("message")
-    client = Client(TWILIO_ACCOUNT_SID, TWILIO_TOKEN)
+    client = Client(os.environ.get("TWILIO_SID"), os.environ.get("TWILIO_TOKEN"))
     if not phone_number or not client_message:
         return jsonify({
             "message": "parameter error"
@@ -43,9 +44,10 @@ def send_message():
     try:
         message = client.messages.create(
             to=phone_number,
-            from_=SEND_NUMBER,
+            from_=os.environ.get("TWILIO_PHONE_NUMBER"),
             body=client_message)
 
+        print("here")
         if message.status == "queued":
             return {
                 "message": client_message,
@@ -71,7 +73,7 @@ def check_distance():
     #return jsonify({"a": my_lon, "b":my_lat, "c": time_thresh, "d":lon, "e":lat}), 200
 
     my_coord = (my_lon, my_lat)
-    target_coord = (lon, lat)
+    target_coord = (lat, lon)
     dpoly = DrivePolygon(time_thresh, target_coord)
     valid = dpoly.check(my_coord)
 

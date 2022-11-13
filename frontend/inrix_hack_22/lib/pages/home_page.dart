@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inrix_hack_22/backend/flask_api.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:inrix_hack_22/models/proximity_reminder.dart';
 import 'package:inrix_hack_22/pages/form_page.dart';
@@ -64,12 +65,15 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () async {
+          onPressed: /*() async {
             await askForPermission();
             await Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const FormPage()));
 
             refreshProximityReminders();
+          }),*/
+              () {
+            sendMessage('Sup', '+18588481710');
           }),
     );
   }

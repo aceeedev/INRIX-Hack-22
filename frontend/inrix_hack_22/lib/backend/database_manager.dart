@@ -28,6 +28,7 @@ class AppDatabase {
     const boolType = 'BOOLEAN NOT NULL';
     const textType = 'TEXT NOT NULL';
     const floatType = 'FLOAT NOT NULL';
+    const integerType = 'INTEGER NOT NULL';
 
     await db.execute('''
 CREATE TABLE $tableProximity (
@@ -35,7 +36,7 @@ CREATE TABLE $tableProximity (
   ${ProximityFields.longitude} $floatType,
   ${ProximityFields.latitude} $floatType,
   ${ProximityFields.address} $textType,
-  ${ProximityFields.proximity} $floatType,
+  ${ProximityFields.proximity} $integerType,
   ${ProximityFields.phoneNumber} $textType,
   ${ProximityFields.phoneNumberName} $textType
   )
