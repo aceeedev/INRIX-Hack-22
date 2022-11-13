@@ -11,6 +11,17 @@ import 'package:inrix_hack_22/backend/database_manager.dart';
 import 'package:inrix_hack_22/backend/geolocation.dart';
 import 'package:workmanager/workmanager.dart';
 
+late Position position;
+void determinePositionWrapper() async {
+  position = await determinePosition();
+  print(position);
+}
+
+late Map coords;
+void checkIfInsideAreaWrapper(myLon, myLat, timeTresh, lon, lat) async {
+  coords = await checkIfInsideArea(myLon, myLat, timeTresh, lon, lat);
+}
+
 class LocationPage extends StatefulWidget {
   const LocationPage({Key? key, required this.proximityReminder})
       : super(key: key);
@@ -24,15 +35,18 @@ class _LocationPageState extends State<LocationPage> {
   @override
   void initState() {
     super.initState();
+    determinePositionWrapper();
+    checkIfInsideAreaWrapper(
+        position.longitude,
+        position.latitude,
+        widget.proximityReminder.proximity,
+        widget.proximityReminder.longitude,
+        widget.proximityReminder.latitude);
   }
 
   // late Position position;
   // determinePositionWrap() async {
   //   position = await determinePosition();
-  // }
-
-  // checkIfInsideAreaWrap(myLon, myLat, timeTresh, lon, lat) async {
-  //   return await checkIfInsideArea(myLon, myLat, timeTresh, lon, lat);
   // }
 
   @override
@@ -45,8 +59,6 @@ class _LocationPageState extends State<LocationPage> {
       mapController = controller;
     }
 
-    // position = determinePositionWrap();
-
     // List coords = checkIfInsideAreaWrap(
     //     position.longitude,
     //     position.latitude,
@@ -54,10 +66,10 @@ class _LocationPageState extends State<LocationPage> {
     //     widget.proximityReminder.longitude,
     //     widget.proximityReminder.latitude)['coords'];
 
-    // List<LatLng> points = [];
-    // for (int i = 0; i < coords.length; i++) {
-    //   points.add(LatLng(coords[1], coords[1]));
-    // }
+    List<LatLng> points = [];
+    for (int i = 0; i < coords.length; i++) {
+      points.add(LatLng(coords[i][0], coords[i][1]));
+    }
 
     // this is a list of polygons around santa clara for demo
     // List<LatLng> points = [
@@ -73,7 +85,7 @@ class _LocationPageState extends State<LocationPage> {
       // given polygonId
       polygonId: PolygonId('1'),
       // initialize the list of points to display polygon
-      // points: points,
+      points: points,
       // given color to polygon
       fillColor: Colors.green.withOpacity(0.3),
       // given border color to polygon
@@ -99,6 +111,7 @@ class _LocationPageState extends State<LocationPage> {
                     target: _center,
                     zoom: 16.0,
                   ),
+                  polygons: _polygon,
                 ),
               ),
               // add map here
