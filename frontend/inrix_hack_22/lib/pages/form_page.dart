@@ -37,6 +37,9 @@ class _FormPageState extends State<FormPage> {
         title: const Text("Form Page"),
       ),
       body: Center(
+          child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.7,
+        width: MediaQuery.of(context).size.width * 0.8,
         child: Form(
           key: formKey,
           child: Column(
@@ -50,7 +53,7 @@ class _FormPageState extends State<FormPage> {
               },
               {
                 'controller': etaTextController,
-                'text': 'How far to go before warning? (minutes)',
+                'text': 'Warning Threshold (minutes)',
                 'validator': intValidator
               },
               {
@@ -66,7 +69,7 @@ class _FormPageState extends State<FormPage> {
             ]),
           ),
         ),
-      ),
+      )),
     );
   }
 
@@ -105,7 +108,7 @@ class _FormPageState extends State<FormPage> {
           validator: inputField['validator'],
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            hintText: 'Please Input the ${inputField['text']}',
+            hintText: '${inputField['text']}',
           ),
         ),
       ));
