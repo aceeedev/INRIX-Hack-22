@@ -72,7 +72,7 @@ class _FormPageState extends State<FormPage> {
 
   void sendForm() async {
     // first find long and lat from address
-    Map<String, double> lonLat =
+    Map<String, dynamic> lonLat =
         await getLonLatFromAddress(addressTextController.text);
 
     ProximityReminder proximityReminder = ProximityReminder(

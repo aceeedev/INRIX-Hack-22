@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     setState(() => isLoading = true);
 
     proximityReminders = await AppDatabase.instance.readAllProximityReminders();
+    print('Length is: ${proximityReminders.length}');
 
     setState(() => isLoading = false);
   }
@@ -66,6 +67,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () async {
             await Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const FormPage()));
+
             refreshProximityReminders();
           }),
     );
